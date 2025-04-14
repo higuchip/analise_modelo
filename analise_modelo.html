@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Entendendo Resultados de Modelos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reset.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/white.css">
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js">
+  </script>
+  <style>
+    body {
+      background-color: #fff;
+      color: #333;
+    }
+    
+    .reveal .slides {
+      text-align: left;
+    }
+    
+    .reveal h1, .reveal h2, .reveal h3 {
+      text-transform: none;
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+    
+    .reveal h1 { font-size: 1.8em; }
+    .reveal h2 { font-size: 1.4em; }
+    .reveal h3 { font-size: 1.2em; }
+    
+    .reveal p, .reveal li {
+      font-size: 0.9em;
+      line-height: 1.4;
+    }
+    
+    .reveal .small { font-size: 0.8em; }
+    .reveal .center { text-align: center; }
+    
+    .reveal .highlight {
+      color: #1b5e20;
+      font-weight: bold;
+    }
+    
+    .reveal .box {
+      border: 1px solid #2e7d32;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 5px;
+      background-color: rgba(46, 125, 50, 0.1);
+      font-size: 0.9em;
+    }
+    
+    .reveal .columns {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    
+    .reveal .column {
+      flex: 1;
+    }
+    
+    .reveal img {
+      width: 350px;
+      height: auto;
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+      margin: 10px auto;
+      display: block;
+    }
+    
+    .reveal ul, .reveal ol {
+      margin-left: 1em;
+      margin-bottom: 1em;
+    }
+    
+    .reveal li {
+      margin-bottom: 0.8em;
+    }
+
+    .reveal .note {
+      background-color: #f0f7fa;
+      border-left: 4px solid #2196f3;
+      padding: 10px 15px;
+      margin: 15px 0;
+      font-style: italic;
+    }
+    
+    .reveal .good {
+      color: #2e7d32;
+    }
+    
+    .reveal .medium {
+      color: #ff9800;
+    }
+    
+    .reveal .poor {
+      color: #f44336;
+    }
+    
+    .reveal table {
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+    
+    .reveal table th {
+      background-color: #2e7d32;
+      color: white;
+      padding: 8px;
+      text-align: center;
+    }
+    
+    .reveal table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    
+    .reveal .simple-matrix {
+      display: table;
+      border-collapse: collapse;
+      margin: 20px auto;
+      width: 80%;
+    }
+    
+    .reveal .row {
+      display: table-row;
+    }
+    
+    .reveal .cell {
+      display: table-cell;
+      border: 2px solid #333;
+      padding: 15px;
+      text-align: center;
+      width: 50%;
+      font-weight: bold;
+    }
+    
+    .reveal .blue-cell {
+      background-color: #bbdefb;
+    }
+    
+    .reveal .red-cell {
+      background-color: #ffcdd2;
+    }
+    
+    .reveal .yellow-cell {
+      background-color: #fff9c4;
+    }
+    
+    .reveal .green-cell {
+      background-color: #c8e6c9;
+    }
+    
+    .reveal .metric-simple {
+      text-align: center;
+      margin: 15px auto;
+      max-width: 350px;
+      padding: 10px;
+      border: 1px solid #2e7d32;
+      border-radius: 8px;
+      background-color: rgba(46, 125, 50, 0.1);
+    }
+    
+    .reveal .metric-name {
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #2e7d32;
+      margin-bottom: 5px;
+    }
+    
+    .reveal .metric-big {
+      font-size: 2.0em;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    
+    .reveal .metric-desc {
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- Slide 1: Título -->
+      <section>
+        <h1>Entendendo Resultados de Modelos</h1>
+        <h3>Conceitos Básicos</h3>
+        <p>Disciplina: Mudanças Climáticas</p>
+        <p>Professor: Pedro Higuchi</p>
+      </section>
+
+      <!-- Slide 2: O que vamos aprender -->
+      <section>
+        <h2>O que vamos aprender</h2>
+        <ul>
+          <li>Por que avaliar modelos</li>
+          <li>Números que indicam se um modelo é bom</li>
+          <li>Gráficos e tabelas importantes</li>
+          <li>Exemplos práticos</li>
+        </ul>
+      </section>
+
+      <!-- Slide 3: Por que avaliar modelos? -->
+      <section>
+        <h2>Por que avaliar modelos?</h2>
+        <div class="columns">
+          <div class="column">
+            <p>Avaliar um modelo é como "testá-lo" antes de usar.</p>
+            <p>Sem avaliação, não sabemos:</p>
+            <ul>
+              <li>Se podemos confiar nas previsões</li>
+              <li>Onde o modelo funciona melhor</li>
+              <li>Se vale a pena usá-lo</li>
+            </ul>
+          </div>
+          <div class="column">
+            <img src='imagens/cientista.png' alt="Cientista testando um equipamento">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Analogia simples -->
+      <section>
+        <h2>Analogia: A Prova Escolar</h2>
+        <div class="columns">
+          <div class="column">
+            <img src='imagens/estudante.png' alt="Estudante fazendo prova">
+          </div>
+          <div class="column">
+            <ul>
+              <li>Estudante (modelo) faz a prova</li>
+              <li>Professor (cientista) corrige</li>
+              <li>Nota (métricas) mostra o desempenho</li>
+              <li>Diferentes questões revelam diferentes habilidades</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Como testamos modelos - Parte 1 -->
+      <section>
+        <h2>Como testamos um modelo?</h2>
+        <p>Dividimos nossos dados em dois grupos:</p>
+        <div class="columns">
+          <div class="column">
+            <img src='imagens/treino_teste.png' alt="Divisão entre dados de treino e teste" style="width: 650px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Estrutura dos Dados -->
+      <section>
+        <h2>Estrutura dos Dados</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p>Antes de dividir os dados em treino e teste, veja como organizamos as informações:</p>
+            <ul style="list-style-position: inside;">
+              <li><strong>Variáveis Ambientais:</strong> Como temperatura e chuva</li>
+              <li><strong>Presença/Ausência:</strong> Onde a espécie está ou não</li>
+              <li><strong>Formato:</strong> Tabelas com locais e características</li>
+            </ul>
+            <p>Exemplo: Dados de uma floresta com diferentes espécies e condições climáticas.</p>
+          </div>
+          <div class="column" style=" align-items: center;">
+            <img src='imagens/estruturadosdados.png' alt="Estrutura dos dados" style="width: 1000px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Como testamos modelos - Parte 2 -->
+      <section>
+        <h2>Como testamos um modelo?</h2>
+        <ol>
+          <li>O modelo faz previsões para os dados de teste</li>
+          <li>Comparamos as previsões com as respostas corretas</li>
+          <li>Calculamos números que mostram o desempenho</li>
+        </ol>
+        <div class="center">
+            <img src='imagens/teste.png' alt="Processo de teste do modelo" style="width:400px; height: auto;">
+        </div>
+      </section>
+
+      <!-- Slide 8: Acurácia -->
+      <section>
+        <h2>Acurácia</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p><strong>Acurácia</strong> é a medida de quão frequentemente o modelo está correto em todas as suas previsões.</p>
+            <p>Exemplo: Se o modelo fez 200 previsões e acertou 170 delas, a acurácia é de 85%.</p>
+            <p><strong>Fórmula:</strong> \(\text{Acurácia} = \frac{\text{Verdadeiros Positivos} + \text{Verdadeiros Negativos}}{\text{Número Total de Casos}}\)</p>
+          </div>
+          <div class="column">
+            <img src='imagens/alvo.png' alt="Acurácia" style="width: 1000px; height: auto;">
+            <img src='imagens/matriz_confusao.png' alt="Acurácia" style="width: 1000px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Matriz de Confusão - Título -->
+      <section>
+        <h2>Tabela de Acertos e Erros</h2>
+        <p>A <span class="highlight">matriz de confusão</span> mostra os tipos de acertos e erros:</p>
+        <img src='imagens/matriz_confusao.png' alt="Matriz de confusão" style="width: 500px; height: auto;">
+      </section>
+
+      <!-- Slide 10: Matriz de Confusão - Visualização -->
+      <section>
+        <h2>Tabela de Acertos e Erros</h2>
+        <div class="simple-matrix">
+          <div class="row">
+            <div class="cell blue-cell">
+              Acertou que NÃO<br>
+              (45 vezes)<br>
+              <span class="small">Verdadeiro Negativo</span>
+            </div>
+            <div class="cell red-cell">
+              Disse SIM, mas era NÃO<br>
+              (12 vezes)<br>
+              <span class="small">Falso Positivo</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cell yellow-cell">
+              Disse NÃO, mas era SIM<br>
+              (3 vezes)<br>
+              <span class="small">Falso Negativo</span>
+            </div>
+            <div class="cell green-cell">
+              Acertou que SIM<br>
+              (40 vezes)<br>
+              <span class="small">Verdadeiro Positivo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide for Erro Tipo 1: Falso Positivo -->
+      <section>
+        <h2>Erro Tipo 1: Falso Positivo</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p>O modelo diz que a espécie está presente, mas na verdade não está.</p>
+            <p><strong>Exemplo:</strong> Dizer que há Erva-mate em uma área onde não existe.</p>
+          </div>
+          <div class="column" style="text-align: center;">
+            <img src='imagens/matriz_confusao.png' alt="Falso Positivo" style="width:500px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide for Erro Tipo 2: Falso Negativo -->
+      <section>
+        <h2>Erro Tipo 2: Falso Negativo</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p>O modelo diz que a espécie não está presente, mas na verdade está.</p>
+            <p><strong>Exemplo:</strong> Não identificar uma população importante de uma espécie ameaçada.</p>
+          </div>
+          <div class="column" style="text-align: center;">
+            <img src="imagens\matriz_confusao.png" alt="Falso Negativo" style="width: 500px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide for Precisão -->
+      <section>
+        <h2>Precisão</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p><strong>Precisão</strong> responde à pergunta: "Das áreas onde o modelo previu presença da espécie, quantas realmente têm a espécie presente?"</p>
+            <p><strong>Exemplo:</strong> Se o modelo previu que a espécie de árvore está presente em 100 locais, e ela realmente está presente em 80 desses locais, a precisão é de 80%.</p>
+            <p><strong>Fórmula:</strong> \(\text{Precisão} = \frac{\text{Verdadeiros Positivos}}{\text{Verdadeiros Positivos} + \text{Falsos Positivos}}\)</p>
+          </div>
+          <div class="column" style="text-align: center;">
+            <img src='imagens/matriz_confusao.png' alt="Precisão" style="width: 350px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide for Sensibilidade (Recall) -->
+      <section>
+        <h2>Sensibilidade (Recall)</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p><strong>Sensibilidade</strong>  responde à pergunta: "Das áreas onde a espécie realmente está presente, quantas foram corretamente identificadas pelo modelo?</p>
+            <p><strong>Exemplo:</strong> Se a espécie de árvore está realmente presente em 150 locais, e o modelo conseguiu identificar corretamente 120 desses locais, o recall é de 80%.</p>
+            <p><strong>Fórmula:</strong> \(\text{Sensibilidade} = \frac{\text{Verdadeiros Positivos}}{\text{Verdadeiros Positivos} + \text{Falsos Negativos}}\)</p>
+          </div>
+          <div class="column" style="text-align: center;">
+            <img src='imagens/matriz_confusao.png' alt="Sensibilidade" style="width: 300px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 15: AUC Simplificado -->
+      <section>
+        <h2>AUC: Nota Geral do Modelo</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.7em;">
+            <p><strong>O que é AUC?</strong> "Área Sob a Curva" - mede a qualidade do modelo</p>
+            <ul style="margin-top: 0.5em;">
+              <li>AUC = 0.5: Modelo aleatório (linha diagonal)</li>
+              <li>AUC = 1.0: Modelo perfeito</li>
+              <li>Interpretação: 0.7-0.8: Aceitável | 0.8-0.9: Bom | >0.9: Excelente</li>
+            </ul>
+            <p>Um AUC de 0.85 significa que o modelo tem 85% de chance de classificar corretamente entre uma área com a espécie e uma sem.</p>
+          </div>
+          <div class="column" style="text-align: center;">
+            <img src="imagens\auc.png" alt="Gráfico simples de curva ROC" style="width:500px; height: auto;">
+            <p style="font-size: 0.8em;">A área sombreada representa o valor de AUC</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 16: Importância das Variáveis -->
+      <section>
+        <h2>O que influencia o modelo?</h2>
+        <div class="columns">
+          <div class="column">
+            <img src="imagens\importanciavariavel.jpg" alt="Gráfico de barras de importância de variáveis" style="width: 1000px; height: auto;">
+          </div>
+          <div class="column">
+            <p>A <span class="highlight">importância das variáveis</span> mostra:</p>
+            <ul>
+              <li>Quais fatores ambientais mais afetam a espécie</li>
+              <li>Valores mais altos = mais importantes</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 17: Exemplo de Importância das Variáveis -->
+      <section>
+        <h2>Exemplo de Importância</h2>
+        <p>Para uma espécie de árvore:</p>
+        <ul>
+          <li>Temperatura do inverno: <span class="highlight">60%</span></li>
+          <li>Chuva na estação seca: 25%</li>
+          <li>Altitude: 10%</li>
+          <li>Outros fatores: 5%</li>
+        </ul>
+        <p class="note">Isso mostra que a espécie é muito sensível à temperatura do inverno!</p>
+             </section>
+
+      <!-- Slide 18: Curvas de Resposta - Intro -->
+      <section>
+        <h2>Como a espécie responde ao ambiente?</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p>As <span class="highlight">curvas de resposta</span> mostram:</p>
+            <ul>
+              <li>Como a probabilidade de encontrar a espécie muda de acordo com cada variável ambiental</li>
+              <li>Quais são as condições preferidas pela espécie</li>
+              <li>Limites ambientais que a espécie pode tolerar</li>
+            </ul>
+          </div>
+          <div class="column" style="display: flex; justify-content: center; align-items: center;">
+            <img src="imagens\curva_resposta.jpg" alt="Exemplo de curva de resposta" style="width: 550px; height: auto;">
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 19: Tipos de Curvas de Resposta -->
+      <section>
+        <h2>Tipos de Curvas de Resposta</h2>
+        <p style="font-size: 0.9em; margin-bottom: 15px;">As curvas de resposta mostram como a probabilidade de presença da espécie varia conforme mudanças em cada variável ambiental</p>
+        <div class="columns">
+          <div class="column" style="font-size: 0.9em;">
+            <p><strong>Curva em sino (unimodal):</strong></p>
+            <img src="imagens\curvasino.png" alt="Curva em sino">
+            <p style="font-size: 0.85em; margin-top: 10px;">Indica que a espécie tem um valor ótimo preferido, com declínio de probabilidade tanto acima quanto abaixo desse valor.</p>
+            <p style="font-size: 0.85em;">Exemplo: Araucária prefere temperaturas entre 12-18°C, não tolerando nem muito frio nem muito calor.</p>
+          </div>
+          <div class="column" style="font-size: 0.9em;">
+            <p><strong>Curva crescente (linear):</strong></p>
+            <img src="imagens\curva_crescente.png" alt="Curva crescente">
+            <p style="font-size: 0.85em; margin-top: 10px;">Mostra que a probabilidade de presença aumenta continuamente conforme a variável aumenta, sem atingir um platô.</p>
+            <p style="font-size: 0.85em;">Exemplo: Algumas espécies de floresta tropical que se beneficiam de mais precipitação, sem um limite superior claro.</p>
+          </div>
+        </div>
+        <p style="font-size: 0.85em; font-style: italic; margin-top: 15px;">Importante: Estas curvas ajudam a definir limites de tolerância e condições ideais para conservação e manejo de espécies.</p>
+      </section>
+
+      
+
+      
+      <!-- Slide 22: Dicas Práticas -->
+      <section>
+        <h2>Dicas para entender resultados</h2>
+        <div class="columns">
+          <div class="column">
+            <h3>O que buscar</h3>
+            <ul>
+              <li>Acurácia > 70%</li>
+              <li>AUC > 0.8</li>
+              <li>Fatores importantes que fazem sentido</li>
+            </ul>
+          </div>
+          <div class="column">
+            <h3>Cuidados</h3>
+            <ul>
+              <li>Não confie em apenas um número</li>
+              <li>O modelo é uma simplificação</li>
+              <li>Use junto com seu conhecimento</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 23: Aplicações -->
+      <section>
+        <h2>Aplicações no mundo real</h2>
+        <div class="columns">
+          <div class="column" style="font-size: 0.5em;">
+            <p><strong>Conservação de espécies ameaçadas:</strong></p>
+            <ul>
+              <li>Identificação de áreas prioritárias para proteção</li>
+              <li>Exemplo: Mapeamento de habitats potenciais para o lobo-guará no Cerrado</li>
+            </ul>
+            
+            <p><strong>Restauração florestal:</strong></p>
+            <ul>
+              <li>Seleção de espécies adequadas para cada local</li>
+              <li>Exemplo: Escolha de árvores nativas para recomposição da Mata Atlântica</li>
+            </ul>
+            
+            <p><strong>Mudanças climáticas:</strong></p>
+            <ul>
+              <li>Previsão de áreas futuras de ocorrência de espécies</li>
+              <li>Exemplo: Identificação de refúgios climáticos para a Araucária no sul do Brasil</li>
+            </ul>
+          </div>
+          
+          <div class="column" style="font-size: 0.5em;">
+            <p><strong>Silvicultura:</strong></p>
+            <ul>
+              <li>Determinação de zonas adequadas para plantio comercial</li>
+              <li>Exemplo: Áreas ótimas para plantio de um clone de Eucalipto </li>
+            </ul>
+            
+            <p><strong>Controle de espécies invasoras:</strong></p>
+            <ul>
+              <li>Previsão de áreas suscetíveis à invasão</li>
+              <li>Exemplo: Monitoramento de áreas propensas à invasão por pinus em campos nativos</li>
+            </ul>
+            
+            <p><strong>Saúde pública:</strong></p>
+            <ul>
+              <li>Mapeamento de riscos de doenças transmitidas por vetores</li>
+              <li>Exemplo: Distribuição potencial do mosquito Aedes aegypti e risco de dengue</li>
+            </ul>
+          </div>
+        </div>
+        
+        <p style="font-size: 0.85em; font-style: italic; margin-top: 15px;">Caso real: O ICMBio utiliza SDMs para redesenhar áreas de conservação e planejar corredores ecológicos para espécies ameaçadas da Mata Atlântica.</p>
+      </section>
+
+      <!-- Slide 24: Resumo -->
+      <section>
+        <h2>Resumo</h2>
+        <ul>
+          <li>Acurácia = % geral de acertos</li>
+          <li>Matriz de confusão = tipos de acertos e erros</li>
+          <li>AUC = nota geral do modelo</li>
+          <li>Importância das variáveis = o que afeta a espécie</li>
+          <li>Curvas de resposta = como a espécie responde</li>
+        </ul>
+              </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.js"></script>
+  <script>
+    // Basic options for Reveal.js
+    Reveal.initialize({
+      controls: true,
+      progress: true,
+      center: false,
+      hash: true
+    });
+  </script>
+</body>
+</html>
