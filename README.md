@@ -15,7 +15,7 @@ A apresentação inclui os seguintes tópicos:
 ## Como utilizar
 Esta apresentação utiliza o framework reveal.js. Para utilizá-la:
 
-1. Abra o arquivo `analise_modelo.html` em um navegador web.
+1. Abra o arquivo `index.html` em um navegador web.
 2. Navegue pelos slides usando as setas do teclado ou clicando nas bordas dos slides.
 3. Pressione a tecla 'Esc' para ver uma visão geral de todos os slides.
 
